@@ -1,8 +1,10 @@
 #!/bin/bash
+source ~/.bashrc
+source `dirname "$0"`/conf.sh
 
 ./create_ozone_dir.sh
 
-spark-shell     --conf spark.executor.instances=40     --conf spark.executor.cores=3     --conf spark.executor.memory=8g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
+spark-shell     --conf spark.executor.instances=40     --conf spark.executor.cores=3     --conf spark.executor.memory=4g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars ./spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
 
 
 
