@@ -5,6 +5,12 @@ curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm
 sudo yum install -y sbt
 sudo yum install -y gcc make flex bison byacc git
 
+# build sbt-spark-package from source locally
+wget https://github.com/databricks/sbt-spark-package/archive/eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+unzip eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+cd sbt-spark-package-eb823d6d3c9fd642334b886103b57de14e00acbd/
+sbt publishLocal
+cd ..
 
 git clone https://github.com/databricks/spark-sql-perf.git
 cd spark-sql-perf/

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOMAIN=weichiu-spark
+DOMAIN=weichiu-ozone
 CLUSTER_SIZE=3
 DOMAIN_BASENAME=".root.hwx.site"
 
