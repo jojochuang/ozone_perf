@@ -14,3 +14,10 @@ To get started, run
 
 2. run the following command
 ./init.sh
+
+3. Go to the CM host. To run Impala TPC-DS, , first generate data by running /tmp/ozone_perf/impala-tpcds/gen_data.sh
+and then run queries: /tmp/ozone_perf/impala-tpcds/run_tpcds.sh
+analyze the result: python /tmp/ozone_perf/impala-tpcds/collect_impala_queries.py
+
+for SparkSQL TPC-DS, first generate data by running /tmp/ozone_perf/sparksql-tpcds/gen_data.sh
+and then run queries: /tmp/ozone_perf/sparksql-tpcds/run_tpcds.sh

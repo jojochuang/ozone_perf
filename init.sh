@@ -2,21 +2,12 @@
 SCRIPT_ROOT=`dirname "$0"`
 source $SCRIPT_ROOT/conf.sh
 
-sudo pip install cm_client
+pip install cm_client
 
-if [ -f "$HOST_FILE" ]; then
-    echo "$HOST_FILE exists."
-else
-    # ask CM for list of hosts.
-    python get_hosts.py $CM_HOST all > $HOST_FILE
-fi
-
-if [ -f "$IMPALAD_HOST_FILE" ]; then
-    echo "$IMPALAD_HOST_FILE exists."
-else
-    # ask CM for list of hosts.
-    python get_hosts.py $CM_HOST IMPALAD > $IMPALAD_HOST_FILE
-fi
+# ask CM for list of hosts.
+python get_hosts.py $CM_HOST all > $HOST_FILE
+# ask CM for list of ImpalaD hosts.
+python get_hosts.py $CM_HOST IMPALAD > $IMPALAD_HOST_FILE
 
 ssh systest@${CM_HOST} sudo -u hdfs ozone shell volume create o3://ozone1/vol1
 ssh systest@${CM_HOST} sudo -u hdfs ozone shell bucket create o3://ozone1/vol1/bucket1

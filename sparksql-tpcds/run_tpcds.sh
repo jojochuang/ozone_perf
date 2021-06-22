@@ -1,5 +1,11 @@
 #!/bin/bash
+CURRENT_DIR=`dirname "$0"`
+source $CURRENT_DIR/../conf.sh
 
+for s in "${scale[@]}"
+do
+    NUM_EXECUTORS=$(( $s / 10 ))
+    spark-shell     --conf spark.executor.instances=${NUM_EXECUTORS}     --conf spark.executor.cores=3     --conf spark.executor.memory=4g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
 import com.databricks.spark.sql.perf.tpcds.TPCDS
 
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
@@ -20,3 +26,6 @@ val experiment = tpcds.runExperiment(
   forkThread = true)
 experiment.waitForFinish(timeout)
 
+EOF
+
+done
