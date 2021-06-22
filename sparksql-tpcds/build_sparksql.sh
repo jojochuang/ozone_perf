@@ -7,8 +7,10 @@ sudo yum install -y sbt
 sudo yum install -y gcc make flex bison byacc git
 
 # build sbt-spark-package from source locally
-wget https://github.com/databricks/sbt-spark-package/archive/eb823d6d3c9fd642334b886103b57de14e00acbd.zip
-unzip eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+if [ ! -f "eb823d6d3c9fd642334b886103b57de14e00acbd.zip" ]; then
+    wget https://github.com/databricks/sbt-spark-package/archive/eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+    unzip eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+fi
 cd sbt-spark-package-eb823d6d3c9fd642334b886103b57de14e00acbd/
 sbt publishLocal
 cd ..

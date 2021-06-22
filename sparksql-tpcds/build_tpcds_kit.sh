@@ -1,5 +1,5 @@
 #!/bin/bash
-source `dirname "$0"`/conf.sh
+source `dirname "$0"`/../conf.sh
 
 HOSTS=()
 while IFS= read -r line; do
@@ -13,7 +13,7 @@ make OS=LINUX
 
 cd ../..
 for host in "${HOSTS[@]}"; do
-    rsync -raP -e 'ssh -o StrictHostKeyChecking=no' tpcds-kit systest@$DOMAIN-${i}.$DOMAIN$DOMAIN_BASENAME:/tmp/
+    rsync -raP -e 'ssh -o StrictHostKeyChecking=no' tpcds-kit systest@$host:/tmp/
 done
 
 
