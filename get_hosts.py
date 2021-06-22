@@ -16,9 +16,10 @@ cm_client.configuration.password = 'admin'
 
 # Create an instance of the API class
 if len(sys.argv) < 2:
-    print("requires one argument: CM host name")
+    print("requires two arguments: [CM host name] [roletype]")
     system.exit(-1)
 api_host_name = sys.argv[1]
+role_type = sys.argv[2]
 api_host = 'http://' + api_host_name
 port = '7180'
 api_version = 'v30'
@@ -28,5 +29,15 @@ api_url = api_host + ':' + port + '/api/' + api_version
 api_client = cm_client.ApiClient(api_url)
 api_instance = cm_client.ClouderaManagerResourceApi(api_client)
 deployment = api_instance.get_deployment2(view='export')
+hosts_map = {}
 for host in deployment.hosts:
-    print(host.hostname)
+    hosts_map.update({host.host_id: host.hostname}) 
+if role_type == "all":
+    for host in deployment.hosts:
+            print(host.hostname)
+else:
+    for cluster in deployment.clusters:
+        for service in cluster.services:
+            for role in service.roles:
+                if role.type == role_type:
+                    print(hosts_map[role.host_ref.host_id])

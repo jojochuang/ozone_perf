@@ -1,6 +1,7 @@
 #!/bin/bash
-source `dirname "$0"`/conf.sh
+source `dirname "$0"`/../conf.sh
 
+cd `dirname "$0"`
 curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
 sudo yum install -y sbt
 sudo yum install -y gcc make flex bison byacc git

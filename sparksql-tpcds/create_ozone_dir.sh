@@ -1,5 +1,5 @@
 #!/bin/bash
-source `dirname "$0"`/conf.sh
+source `dirname "$0"`/../conf.sh
 
 ozone sh volume create o3://$OZONE_SERVICE_ID/sparksqldata
 
