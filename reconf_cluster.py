@@ -76,6 +76,8 @@ for service in services.items:
         yarn = service
     if service.type == 'HIVE':
         hive = service
+    if service.type == 'HBASE':
+        hbase = service
 
 #configs = services_api_instance.read_service_config(cluster.name, ozone.name, view='FULL')
 #for config in configs.items:
@@ -110,10 +112,6 @@ def configure_ozone():
 
     body = cm_client.ApiServiceConfig([env_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
-
-
-    # support async profiler
-    safey_valve_config = cm_client.ApiConfig(name="ozone-conf/ozone-site.xml_service_safety_valve", value="<property><name>hdds.profiler.endpoint.enabled</name><value>true</value></property>")
 
     body = cm_client.ApiServiceConfig([safey_valve_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
@@ -151,6 +149,39 @@ def configure_hive():
 
     print("Hive updated")
 
+
+def configure_hbase():
+    # add java options
+    
+    role_api_instance = cm_client.RolesResourceApi(api_client)
+    rcg_configs = role_api_instance.read_roles(cluster.name, hbase.name)
+    regionserver_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'REGIONSERVER']
+
+    hbase_java_opts_config = cm_client.ApiConfig(name="hbase_regionserver_java_opts", value="{{JAVA_GC_ARGS}} -XX:ReservedCodeCacheSize=256m -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=50100")
+
+    body = cm_client.ApiServiceConfig([hbase_java_opts_config])
+    updated_configs = role_api_instance.update_role_config(cluster.name, regionserver_groups[0], hbase.name, body=body)
+
+    # add environment variable
+    env_config = cm_client.ApiConfig(name="hbase_service_env_safety_valve", value="ASYNC_PROFILER_HOME=/opt/async-profiler-1.8.5-linux-x64")
+
+    body = cm_client.ApiServiceConfig([env_config])
+    updated_configs = services_api_instance.update_service_config(cluster.name, hbase.name, body=body)
+
+    # enable offheap bucket cache
+    env_config = cm_client.ApiConfig(name="hbase_bucketcache_ioengine", value="offheap")
+
+    body = cm_client.ApiServiceConfig([env_config])
+    updated_configs = role_api_instance.update_role_config(cluster.name, regionserver_groups[0], hbase.name, body=body)
+
+    # bucket cache size
+    env_config = cm_client.ApiConfig(name="hbase_bucketcache_size", value="8192")
+
+    body = cm_client.ApiServiceConfig([env_config])
+    updated_configs = role_api_instance.update_role_config(cluster.name, regionserver_groups[0], hbase.name, body=body)
+
+    print("HBase updated")
+
 def refresh():
     cluster_api_instance = cm_client.ClustersResourceApi(api_client)
     restart_command = cluster_api_instance.deploy_client_config(cluster_name)
@@ -164,7 +195,12 @@ def refresh():
     wait(restart_command)
     print("Active: %s. Success: %s" % (restart_command.active, restart_command.success))
 
-configure_ozone()
-configure_yarn()
-configure_hive()
+if ozone is not None:
+    configure_ozone()
+if yarn is not None:
+    configure_yarn()
+if hive is not None:
+    configure_hive()
+if hbase is not None:
+    configure_hbase()
 refresh()
