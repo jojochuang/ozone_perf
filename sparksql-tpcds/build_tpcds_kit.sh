@@ -7,11 +7,13 @@ while IFS= read -r line; do
 done < $SCRIPT_ROOT/../$HOST_FILE
 
 cd `dirname "$0"`
-git clone https://github.com/databricks/tpcds-kit.git
-cd tpcds-kit/tools
-make OS=LINUX
+if [ ! -f "tpcds-kit" ]; then
+    git clone https://github.com/databricks/tpcds-kit.git
+    cd tpcds-kit/tools
+    make OS=LINUX
+    cd ../..
+fi
 
-cd ../..
 for host in "${HOSTS[@]}"; do
     rsync -raP -e 'ssh -o StrictHostKeyChecking=no' tpcds-kit systest@$host:/tmp/
 done

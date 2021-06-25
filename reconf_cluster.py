@@ -93,6 +93,8 @@ def configure_ozone():
     body = cm_client.ApiServiceConfig([safey_valve_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
 
+    # TODO: add -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints java options to export more accurate async profiler output
+
     # add java options
     ozone_java_opts_config = cm_client.ApiConfig(name="ozone_java_opts", value="{{java_args}} -XX:NativeMemoryTracking=summary")
     #ozone_java_opts_config = cm_client.ApiConfig(name="ozone_java_opts", value="{{java_args}} -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=59999")
@@ -168,6 +170,8 @@ def configure_hbase():
     body = cm_client.ApiServiceConfig([env_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, hbase.name, body=body)
 
+    # TODO: add -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints java options to export more accurate async profiler output
+
     # enable offheap bucket cache
     env_config = cm_client.ApiConfig(name="hbase_bucketcache_ioengine", value="offheap")
 
@@ -195,12 +199,12 @@ def refresh():
     wait(restart_command)
     print("Active: %s. Success: %s" % (restart_command.active, restart_command.success))
 
-if ozone is not None:
+if 'ozone' in globals():
     configure_ozone()
-if yarn is not None:
+if 'yarn' in globals():
     configure_yarn()
-if hive is not None:
+if 'hive' in globals():
     configure_hive()
-if hbase is not None:
+if 'hbase' in globals():
     configure_hbase()
 refresh()

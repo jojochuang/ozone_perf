@@ -10,16 +10,16 @@ sudo yum install -y gcc make flex bison byacc git
 if [ ! -f "eb823d6d3c9fd642334b886103b57de14e00acbd.zip" ]; then
     wget https://github.com/databricks/sbt-spark-package/archive/eb823d6d3c9fd642334b886103b57de14e00acbd.zip
     unzip eb823d6d3c9fd642334b886103b57de14e00acbd.zip
+    cd sbt-spark-package-eb823d6d3c9fd642334b886103b57de14e00acbd/
+    sbt publishLocal
+    cd ..
 fi
-cd sbt-spark-package-eb823d6d3c9fd642334b886103b57de14e00acbd/
-sbt publishLocal
-cd ..
 
 git clone https://github.com/databricks/spark-sql-perf.git
 cd spark-sql-perf/
 # support spark 2.4 and scala 2.11
 git checkout 85bbfd4ca22b386b3216af5434b44ad3b6a32b58
 
-sbt assembly
+sbt 'set test in Test := {}' assembly
 
 echo "Done. Next, run build_tpcds_kit.sh to build and install DataBricks' tpcds-kit"
