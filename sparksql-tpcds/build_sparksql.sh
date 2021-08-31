@@ -2,7 +2,10 @@
 source `dirname "$0"`/../conf.sh
 
 cd `dirname "$0"`
-curl https://bintray.com/sbt/rpm/rpm | sudo tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+sudo rm -f /etc/yum.repos.d/bintray-rpm.repo
+curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo
+sudo mv sbt-rpm.repo /etc/yum.repos.d/
+
 sudo yum install -y sbt
 sudo yum install -y gcc make flex bison byacc git
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # configure these
-DOMAIN=weichiu-scale
+DOMAIN=weichiu
 CM_HOST=${DOMAIN}-1.${DOMAIN}.root.hwx.site
 OZONE_SERVICE_ID="ozone1"
 
