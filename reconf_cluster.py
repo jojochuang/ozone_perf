@@ -10,10 +10,13 @@ from cm_client.rest import ApiException
 from pprint import pprint
 import sys
 import time
+import os
 
 # Configure HTTP basic authorization: basic
 cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
+
+file_system_prefix = os.environ["FILE_SYSTEM_PREFIX"]
 
 def wait(cmd, timeout=None):
     SYNCHRONOUS_COMMAND_ID = -1
@@ -62,6 +65,8 @@ api_client = cm_client.ApiClient(api_url)
 cluster_api_instance = cm_client.ClustersResourceApi(api_client)
 
 api_response = cluster_api_instance.read_clusters(view='SUMMARY')
+
+
 for cluster in api_response.items:
     print(cluster.name, "-", cluster.full_version)
     cluster_name = cluster.name
@@ -140,12 +145,12 @@ def configure_hive():
         return
 
     # set up hive warehouse directory to o3
-    warehouse_directory_config = cm_client.ApiConfig(name="hive_warehouse_directory", value="o3fs://bucket1.vol1.ozone1/managed/hive")
+    warehouse_directory_config = cm_client.ApiConfig(name="hive_warehouse_directory", value=file_system_prefix + "/managed/hive")
     body = cm_client.ApiServiceConfig([warehouse_directory_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, hive.name, body=body)
 
     # set up hive external warehouse directory to o3
-    external_warehouse_directory_config = cm_client.ApiConfig(name="hive_warehouse_external_directory", value="o3fs://bucket1.vol1.ozone1/external/hive")
+    external_warehouse_directory_config = cm_client.ApiConfig(name="hive_warehouse_external_directory", value=file_system_prefix + "/external/hive")
     body = cm_client.ApiServiceConfig([external_warehouse_directory_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, hive.name, body=body)
 
@@ -189,12 +194,15 @@ def configure_hbase():
 def refresh():
     cluster_api_instance = cm_client.ClustersResourceApi(api_client)
     restart_command = cluster_api_instance.deploy_client_config(cluster_name)
+    print("Deploy client config ...")
     wait(restart_command)
     print("Active: %s. Success: %s" % (restart_command.active, restart_command.success))
     restart_command = cluster_api_instance.refresh(cluster_name)
+    print("Refresh ...")
     wait(restart_command)
     print("Active: %s. Success: %s" % (restart_command.active, restart_command.success))
     restart_args = cm_client.ApiRestartClusterArgs()
+    print("Restarting the cluster...")
     restart_command = cluster_api_instance.restart_command(cluster_name, body=restart_args)
     wait(restart_command)
     print("Active: %s. Success: %s" % (restart_command.active, restart_command.success))

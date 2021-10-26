@@ -14,10 +14,10 @@ python get_hosts.py $CM_HOST REGIONSERVER > $REGIONSERVER_HOST_FILE
 ssh systest@${CM_HOST} sudo -u hdfs ozone shell volume create o3://ozone1/vol1
 ssh systest@${CM_HOST} sudo -u hdfs ozone shell bucket create o3://ozone1/vol1/bucket1
 
-ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p o3fs://bucket1.vol1.ozone1/managed/hive
-ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p o3fs://bucket1.vol1.ozone1/external/hive
+ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/managed/hive
+ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/external/hive
 
-python ./reconf_cluster.py ${CM_HOST}
+#python ./reconf_cluster.py ${CM_HOST}
 
 ./sync.sh
 ./install.sh
