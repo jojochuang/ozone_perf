@@ -17,7 +17,7 @@ val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 import com.databricks.spark.sql.perf.tpcds.TPCDSTables
 
 // Set:
-val rootDir = "o3fs://tpcds${s}gb.sparksqldata.ozone1/"
+val rootDir = "o3fs://tpcds${s}gb.sparksqldata.${OZONE_SERVICE_ID}/"
 
 val databaseName = "o3_${s}gb" // name of database to create.
 

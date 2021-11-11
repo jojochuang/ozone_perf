@@ -3,10 +3,13 @@
 # configure these
 DOMAIN=weichiu
 CM_HOST=${DOMAIN}-1.${DOMAIN}.root.hwx.site
-OZONE_SERVICE_ID="ozone1"
+# choose between http or https
+export CM_HTTP=http
+export OZONE_SERVICE_ID="ozone1"
 # choose between o3fs and ofs
 export FILE_SYSTEM_PREFIX="ofs://$OZONE_SERVICE_ID/vol1/bucket"
 #FILE_SYSTEM_PREFIX="o3fs://$OZONE_SERVICE_ID.vol1.ozone1"
+KERBEROS=true
 
 JAVA_HOME_FINDER="/usr/java/jdk1.8.0_*"
 scale=( 100  )

@@ -17,6 +17,7 @@ cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
 
 file_system_prefix = os.environ["FILE_SYSTEM_PREFIX"]
+ozone_service_id = os.environ["OZONE_SERVICE_ID"]
 
 def wait(cmd, timeout=None):
     SYNCHRONOUS_COMMAND_ID = -1
@@ -50,11 +51,12 @@ def wait(cmd, timeout=None):
 
 
 # Create an instance of the API class
+cm_http = os.environ["CM_HTTP"]
 if len(sys.argv) < 2:
     print("requires one argument: CM host name")
     system.exit(-1)
 api_host_name = sys.argv[1]
-api_host = 'http://' + api_host_name
+api_host = cm_http + '://' + api_host_name
 print("cluster: " + api_host)
 port = '7180'
 api_version = 'v30'
@@ -115,7 +117,7 @@ def configure_ozone():
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
 
     # update service id
-    env_config = cm_client.ApiConfig(name="ozone.service.id", value="ozone1")
+    env_config = cm_client.ApiConfig(name="ozone.service.id", value=ozone_service_id)
 
     body = cm_client.ApiServiceConfig([env_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)

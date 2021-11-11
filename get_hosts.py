@@ -9,18 +9,20 @@ from cm_client.rest import ApiException
 from pprint import pprint
 import sys
 import time
+import os
 
 # Configure HTTP basic authorization: basic
 cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
 
 # Create an instance of the API class
+cm_http = os.environ["CM_HTTP"]
 if len(sys.argv) < 2:
     print("requires two arguments: [CM host name] [roletype]")
     system.exit(-1)
 api_host_name = sys.argv[1]
 role_type = sys.argv[2]
-api_host = 'http://' + api_host_name
+api_host = cm_http + '://' + api_host_name
 port = '7180'
 api_version = 'v30'
 # Construct base URL for API
