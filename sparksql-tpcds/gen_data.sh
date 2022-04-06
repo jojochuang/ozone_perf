@@ -41,7 +41,7 @@ tables.genData(
     numPartitions = ${s}) // how many dsdgen partitions to run - number of input tasks.
 
 // Create the specified database
-sql(s"create database $databaseName")
+sql(s"create database " + databaseName)
 // Create metastore tables in a specified database for your data.
 // Once tables are created, the current database will be switched to the specified database.
 tables.createExternalTables(rootDir, "parquet", databaseName, overwrite = true, discoverPartitions = true)

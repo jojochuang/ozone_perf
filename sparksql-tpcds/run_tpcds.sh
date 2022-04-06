@@ -18,7 +18,7 @@ val iterations = 1 // how many iterations of queries to run.
 val queries = tpcds.tpcds2_4Queries // queries to run.
 val timeout = 24*60*60 // timeout, in seconds.
 // Run:
-sql(s"use $databaseName")
+sql(s"use " + databaseName)
 val experiment = tpcds.runExperiment(
   queries, 
   iterations = iterations,

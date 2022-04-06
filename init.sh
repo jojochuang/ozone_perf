@@ -19,6 +19,7 @@ ssh systest@${CM_HOST} sudo -u hdfs ozone shell bucket create o3://$OZONE_SERVIC
 
 ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/managed/hive
 ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/external/hive
+# TODO: check to make sure the directories are created properly
 
 python ./reconf_cluster.py ${CM_HOST}
 
