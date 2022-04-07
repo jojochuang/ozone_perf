@@ -79,6 +79,8 @@ for service in services.items:
     #print(service.display_name, "-", service.type)
     if service.type == 'OZONE':
         ozone = service
+    if service.type == 'HDFS':
+        hdfs = service
     if service.type == 'YARN':
         yarn = service
     if service.type == 'HIVE':
@@ -86,10 +88,45 @@ for service in services.items:
     if service.type == 'HBASE':
         hbase = service
 
+role_api_instance = cm_client.RolesResourceApi(api_client)
+
 #configs = services_api_instance.read_service_config(cluster.name, ozone.name, view='FULL')
 #for config in configs.items:
 #    if config.name.find("safety_valve"):
 #      print("%s - %s - %s" % (config.name, config.related_name, config.description))
+
+# HDFS
+def configure_hdfs():
+
+    rcg_configs = role_api_instance.read_roles(cluster.name, hdfs.name)
+    namenode_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'NAMENODE']
+
+    namenode_java_opts_config = cm_client.ApiConfig(name="namenode_java_opts", value="{{JAVA_GC_ARGS}} -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=59979")
+    body = cm_client.ApiServiceConfig([namenode_java_opts_config])
+    for namenode_group in namenode_groups:
+        updated_configs = role_api_instance.update_role_config(cluster.name, namenode_group, hdfs.name, body=body)
+
+    datanode_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'DATANODE']
+
+    datanode_java_opts_config = cm_client.ApiConfig(name="datanode_java_opts", value="{{JAVA_GC_ARGS}} -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=59979")
+    body = cm_client.ApiServiceConfig([datanode_java_opts_config])
+    for datanode_group in datanode_groups:
+        updated_configs = role_api_instance.update_role_config(cluster.name, datanode_group, hdfs.name, body=body)
+
+
+
+    # add java options
+    #namenode_java_opts_config = cm_client.ApiConfig(name="namenode_java_opts", value="{{JAVA_GC_ARGS}} -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=59979")
+
+    #body = cm_client.ApiServiceConfig([namenode_java_opts_config])
+    #updated_configs = services_api_instance.update_service_config(cluster.name, hdfs.name, body=body)
+
+    #datanode_java_opts_config = cm_client.ApiConfig(name="datanode_java_opts", value="{{JAVA_GC_ARGS}} -XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=59989")
+
+    #body = cm_client.ApiServiceConfig([datanode_java_opts_config])
+    #updated_configs = services_api_instance.update_service_config(cluster.name, hdfs.name, body=body)
+
+    print("HDFS updated")
 
 # OZONE
 
@@ -129,7 +166,6 @@ def configure_ozone():
 # YARN
 
 def configure_yarn():
-    role_api_instance = cm_client.RolesResourceApi(api_client)
     rcg_configs = role_api_instance.read_roles(cluster.name, yarn.name)
     gateway_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'GATEWAY']
 
@@ -137,10 +173,7 @@ def configure_yarn():
     body = cm_client.ApiServiceConfig([map_memory_config])
     updated_configs = role_api_instance.update_role_config(cluster.name, gateway_groups[0], yarn.name, body=body)
 
-
     print("YARN updated")
-    #for updated_config in updated_configs.items:
-    #    print("%s - %s" % (updated_config.name, updated_config.value))
 
 def configure_hive():
     if "hive" not in globals():
@@ -211,6 +244,8 @@ def refresh():
 
 if 'ozone' in globals():
     configure_ozone()
+if 'hdfs' in globals():
+    configure_hdfs()
 if 'yarn' in globals():
     configure_yarn()
 if 'hive' in globals():

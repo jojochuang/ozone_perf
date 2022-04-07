@@ -14,11 +14,14 @@ python get_hosts.py $CM_HOST REGIONSERVER > $REGIONSERVER_HOST_FILE
 if [ "$KERBEROS" = "true" ]; then
     ssh systest@${CM_HOST} sudo -u hdfs kinit -kt /cdep/keytabs/hdfs.keytab hdfs
 fi
-ssh systest@${CM_HOST} sudo -u hdfs ozone shell volume create o3://$OZONE_SERVICE_ID/vol1
-ssh systest@${CM_HOST} sudo -u hdfs ozone shell bucket create o3://$OZONE_SERVICE_ID/vol1/bucket1
 
-ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/managed/hive
-ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/external/hive
+if [ "$FILE_SYSTEM" == "ozone" ]; then
+    ssh systest@${CM_HOST} sudo -u hdfs ozone shell volume create o3://$OZONE_SERVICE_ID/vol1
+    ssh systest@${CM_HOST} sudo -u hdfs ozone shell bucket create o3://$OZONE_SERVICE_ID/vol1/bucket1
+
+    ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/managed/hive
+    ssh systest@${CM_HOST} sudo -u hdfs hdfs dfs -mkdir -p $FILE_SYSTEM_PREFIX/external/hive
+fi
 # TODO: check to make sure the directories are created properly
 
 python ./reconf_cluster.py ${CM_HOST}
