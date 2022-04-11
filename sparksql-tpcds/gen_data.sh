@@ -10,10 +10,10 @@ do
     NUM_EXECUTORS=$(( $s / 10 ))
 
     if [ "$FILE_SYSTEM" == "ozone" ]; then
-        DATABASE_NAME="o3_${s}gb" // name of database to create.
+        DATABASE_NAME="o3_${s}gb"
         ROOT_DIR="o3fs://tpcds${s}gb.sparksqldata.${OZONE_SERVICE_ID}/"
     elif [ "$FILE_SYSTEM" == "hdfs" ]; then
-        DATABASE_NAME="hdfs_${s}gb" // name of database to create.
+        DATABASE_NAME="hdfs_${s}gb"
         ROOT_DIR="/tmp/sparksqldata/tpcds${s}gb"
     fi
     #export FILE_SYSTEM_PREFIX="ofs://$OZONE_SERVICE_ID/vol1/bucket"
