@@ -8,8 +8,8 @@ export CM_HTTP=http
 export OZONE_SERVICE_ID="ozone1"
 
 # FILE_SYSTEM is ozone or hdfs
-#export FILE_SYSTEM="ozone" 
-export FILE_SYSTEM="hdfs" 
+export FILE_SYSTEM="ozone" 
+#export FILE_SYSTEM="hdfs" 
 
 if [ "$FILE_SYSTEM" == "ozone" ]; then
     # choose between o3fs and ofs

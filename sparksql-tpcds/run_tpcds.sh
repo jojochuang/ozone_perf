@@ -6,9 +6,9 @@ for s in "${scale[@]}"
 do
     NUM_EXECUTORS=$(( $s / 10 ))
     if [ "$FILE_SYSTEM" == "ozone" ]; then
-        DATABASE_NAME="o3_${s}gb" // name of database to create.
+        DATABASE_NAME="o3_${s}gb"
     elif [ "$FILE_SYSTEM" == "hdfs" ]; then
-        DATABASE_NAME="hdfs_${s}gb" // name of database to create.
+        DATABASE_NAME="hdfs_${s}gb"
     fi
     spark-shell     --conf spark.executor.instances=${NUM_EXECUTORS}     --conf spark.executor.cores=3     --conf spark.executor.memory=4g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
 import com.databricks.spark.sql.perf.tpcds.TPCDS
