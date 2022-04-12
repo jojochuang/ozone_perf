@@ -18,6 +18,10 @@ if [ "$FILE_SYSTEM" == "ozone" ]; then
 elif [ "$FILE_SYSTEM" == "hdfs" ]; then
     export FILE_SYSTEM_PREFIX=""
 fi
+
+# select between 'sequencefile', 'rcfile', 'orc', 'parquet', 'textfile' and 'avro'.
+SPARK_SQL_FILE_FORMAT="parquet"
+
 KERBEROS=true
 
 JAVA_HOME_FINDER="/usr/java/jdk1.8.0_*"

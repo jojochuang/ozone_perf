@@ -5,22 +5,33 @@ source $CURRENT_DIR/../conf.sh
 
 $CURRENT_DIR/create_ozone_dir.sh
 
+
+if [ ! -f "async-profiler-2.0-linux-x64.tar.gz" ]; then
+    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v5.0/async-profiler-2.0-linux-x64.tar.gz
+    hadoop fs -put async-profiler-2.0-linux-x64.tar.gz /tmp/
+fi
+
 for s in "${scale[@]}"
 do
     NUM_EXECUTORS=$(( $s / 10 ))
 
     if [ "$FILE_SYSTEM" == "ozone" ]; then
-        DATABASE_NAME="o3_${s}gb"
+        DATABASE_NAME="o3_${SPARK_SQL_FILE_FORMAT}_${s}gb"
         ROOT_DIR="o3fs://tpcds${s}gb.sparksqldata.${OZONE_SERVICE_ID}/"
     elif [ "$FILE_SYSTEM" == "hdfs" ]; then
-        DATABASE_NAME="hdfs_${s}gb"
+        DATABASE_NAME="hdfs_${SPARK_SQL_FILE_FORMAT}_${s}gb"
         ROOT_DIR="/tmp/sparksqldata/tpcds${s}gb"
     fi
-    #export FILE_SYSTEM_PREFIX="ofs://$OZONE_SERVICE_ID/vol1/bucket"
 
-    spark-shell     --conf spark.executor.instances=${NUM_EXECUTORS}     --conf spark.executor.cores=3     --conf spark.executor.memory=4g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
-
-
+    spark-shell \
+--conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
+--conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./app_flamegraph.html" \
+--conf spark.executor.instances=${NUM_EXECUTORS} \
+--conf spark.executor.cores=3 \
+--conf spark.executor.memory=4g \
+--conf spark.executor.memoryOverhead=2g \
+--conf spark.driver.memory=4g \
+--jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
 
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 
@@ -32,7 +43,7 @@ val rootDir = "${ROOT_DIR}"
 val databaseName = "${DATABASE_NAME}" // name of database to create.
 
 val scaleFactor = "${s}" // scaleFactor defines the size of the dataset to generate (in GB).
-val format = "parquet" // valid spark format like parquet "parquet".
+val format = "${SPARK_SQL_FILE_FORMAT}" // valid spark format like parquet "parquet".
 // Run:
 val tables = new TPCDSTables(sqlContext,
     dsdgenDir = "/tmp/tpcds-kit/tools", // location of dsdgen
@@ -60,7 +71,6 @@ tables.createExternalTables(rootDir, "parquet", databaseName, overwrite = true, 
 
 // For CBO only, gather statistics on all columns:
 tables.analyzeTables(databaseName, analyzeColumns = true)
-
 
 EOF
 

@@ -18,4 +18,3 @@ do
         echo "Waiting for completion of job " $job
         wait $job
 done
-

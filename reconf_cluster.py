@@ -173,6 +173,15 @@ def configure_yarn():
     body = cm_client.ApiServiceConfig([map_memory_config])
     updated_configs = role_api_instance.update_role_config(cluster.name, gateway_groups[0], yarn.name, body=body)
 
+
+    # retain localized files for 1 hour after job completion
+    nm_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'NODEMANAGER']
+
+    debug_delay_config = cm_client.ApiConfig(name="yarn_nodemanager_delete_debug_delay_sec", value="3600")
+    body = cm_client.ApiServiceConfig([debug_delay_config])
+    for nm in nm_groups:
+        updated_configs = role_api_instance.update_role_config(cluster.name, nm, yarn.name, body=body)
+
     print("YARN updated")
 
 def configure_hive():
