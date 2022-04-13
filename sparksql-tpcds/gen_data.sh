@@ -65,7 +65,7 @@ tables.genData(
 sql(s"create database " + databaseName)
 // Create metastore tables in a specified database for your data.
 // Once tables are created, the current database will be switched to the specified database.
-tables.createExternalTables(rootDir, "parquet", databaseName, overwrite = true, discoverPartitions = true)
+tables.createExternalTables(rootDir, format, databaseName, overwrite = true, discoverPartitions = true)
 // Or, if you want to create temporary tables
 // tables.createTemporaryTables(location, format)
 

@@ -11,7 +11,15 @@ do
         DATABASE_NAME="hdfs_${SPARK_SQL_FILE_FORMAT}_${s}gb"
         DATABASE_NAME="hdfs_${s}gb"
     fi
-    spark-shell     --conf spark.executor.instances=${NUM_EXECUTORS}     --conf spark.executor.cores=3     --conf spark.executor.memory=4g     --conf spark.executor.memoryOverhead=2g --conf spark.driver.memory=4g     --jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
+    spark-shell \
+--conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
+--conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./tpcds_flamegraph.html" \
+--conf spark.executor.instances=${NUM_EXECUTORS} \
+--conf spark.executor.cores=3 \
+--conf spark.executor.memory=4g \
+--conf spark.executor.memoryOverhead=2g \
+--conf spark.driver.memory=4g \
+--jars $CURRENT_DIR/spark-sql-perf/target/scala-2.11/spark-sql-perf-assembly-0.5.0-SNAPSHOT.jar <<EOF
 import com.databricks.spark.sql.perf.tpcds.TPCDS
 
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
@@ -21,10 +29,10 @@ val tpcds = new TPCDS (sqlContext = sqlContext)
 val databaseName = "${DATABASE_NAME}" // name of database with TPCDS data.
 val resultLocation = "/tmp/spark_tpcds/" // place to write results
 val iterations = 1 // how many iterations of queries to run.
+sql(s"use " + databaseName)
 val queries = tpcds.tpcds2_4Queries // queries to run.
 val timeout = 24*60*60 // timeout, in seconds.
 // Run:
-sql(s"use " + databaseName)
 val experiment = tpcds.runExperiment(
   queries, 
   iterations = iterations,
