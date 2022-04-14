@@ -9,7 +9,6 @@ do
         DATABASE_NAME="o3_${SPARK_SQL_FILE_FORMAT}_${s}gb"
     elif [ "$FILE_SYSTEM" == "hdfs" ]; then
         DATABASE_NAME="hdfs_${SPARK_SQL_FILE_FORMAT}_${s}gb"
-        DATABASE_NAME="hdfs_${s}gb"
     fi
     spark-shell \
 --conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
