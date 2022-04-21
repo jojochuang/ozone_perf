@@ -21,6 +21,7 @@ fi
 
 # select between 'sequencefile', 'rcfile', 'orc', 'parquet', 'textfile' and 'avro'.
 SPARK_SQL_FILE_FORMAT="parquet"
+#SPARK_SQL_FILE_FORMAT="orc"
 
 KERBEROS=true
 

@@ -17,10 +17,10 @@ do
 
     if [ "$FILE_SYSTEM" == "ozone" ]; then
         DATABASE_NAME="o3_${SPARK_SQL_FILE_FORMAT}_${s}gb"
-        ROOT_DIR="o3fs://tpcds${s}gb.sparksqldata.${OZONE_SERVICE_ID}/"
+        ROOT_DIR="o3fs://tpcds${s}gb${SPARK_SQL_FILE_FORMAT}.sparksqldata.${OZONE_SERVICE_ID}/"
     elif [ "$FILE_SYSTEM" == "hdfs" ]; then
         DATABASE_NAME="hdfs_${SPARK_SQL_FILE_FORMAT}_${s}gb"
-        ROOT_DIR="/tmp/sparksqldata/tpcds${s}gb"
+        ROOT_DIR="/tmp/sparksqldata/tpcds${s}gb_${SPARK_SQL_FILE_FORMAT}"
     fi
 
     spark-shell \
