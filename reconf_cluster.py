@@ -87,6 +87,8 @@ for service in services.items:
         hive = service
     if service.type == 'HBASE':
         hbase = service
+    if service.type == 'IMPALA':
+        impala = service
 
 role_api_instance = cm_client.RolesResourceApi(api_client)
 
@@ -235,6 +237,41 @@ def configure_hbase():
 
     print("HBase updated")
 
+def configure_impala():
+    # add java options
+
+    #api_instance = cm_client.RoleConfigGroupsResourceApi(api_client)
+    #rcg_configs = api_instance.read_role_config_groups(cluster.name, impala.name)
+    #pprint(rcg_configs)
+    #impalad_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.role_type == 'IMPALAD']
+    #impalad_java_opts_config = {"impalad_embedded_java_opts": "-XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=50110"}
+
+    #body = cm_client.ApiRoleConfigGroup([impalad_java_opts_config])
+    #for impalad_group in impalad_groups:
+    #    updated_configs = api_instance.update_role_config_group(cluster.name, impalad_group, impala.name, body=impalad_java_opts_config)
+
+
+    #return
+
+
+    
+    role_api_instance = cm_client.RolesResourceApi(api_client)
+    rcg_configs = role_api_instance.read_roles(cluster.name, impala.name)
+    impalad_groups = [rcg_config.name for rcg_config in rcg_configs.items if rcg_config.type == 'IMPALAD']
+
+    impalad_java_opts_config = cm_client.ApiConfig(name="impalad_embedded_java_opts", value="-XX:NativeMemoryTracking=summary -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=50110")
+
+    body = cm_client.ApiServiceConfig([impalad_java_opts_config])
+    for impalad_group in impalad_groups:
+        updated_configs = role_api_instance.update_role_config(cluster.name, impalad_group, impala.name, body=body)
+
+    # add environment variable
+    env_config = cm_client.ApiConfig(name="impala_service_env_safety_valve", value="ASYNC_PROFILER_HOME=/opt/async-profiler-1.8.5-linux-x64")
+
+    body = cm_client.ApiServiceConfig([env_config])
+    updated_configs = services_api_instance.update_service_config(cluster.name, impala.name, body=body)
+    print("HBase updated")
+
 def refresh():
     cluster_api_instance = cm_client.ClustersResourceApi(api_client)
     restart_command = cluster_api_instance.deploy_client_config(cluster_name)
@@ -261,4 +298,6 @@ if 'hive' in globals():
     configure_hive()
 if 'hbase' in globals():
     configure_hbase()
+if 'impala' in globals():
+    configure_impala()
 refresh()

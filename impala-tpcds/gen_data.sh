@@ -11,7 +11,7 @@ done < $CURRENT_DIR/../$IMPALAD_HOST_FILE
 for s in "${scale[@]}"
 do
 	cd $CURRENT_DIR/impala-tpcds-kit/tpcds-gen
-	yarn jar target/tpcds-gen-1.0-SNAPSHOT.jar -d $FILE_SYSTEM_PREFIX/o3_${s} -p 100 -s ${s}
+	yarn jar target/tpcds-gen-1.0-SNAPSHOT.jar -d $FILE_SYSTEM_PREFIX/o3_${s} -p 25 -s ${s}
 	cd ../..
 
         expanded_prefx=$( echo $FILE_SYSTEM_PREFIX | sed 's/\//\\\//g' )

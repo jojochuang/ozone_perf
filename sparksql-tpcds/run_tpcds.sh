@@ -12,7 +12,7 @@ do
     fi
     spark-shell \
 --conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
---conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./tpcds_flamegraph.html" \
+--conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,event=cpu,file=./tpcds_flamegraph.html" \
 --conf spark.executor.instances=${NUM_EXECUTORS} \
 --conf spark.executor.cores=3 \
 --conf spark.executor.memory=4g \
