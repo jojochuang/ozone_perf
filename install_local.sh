@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source `dirname "$0"`/conf.sh
 CURRENT_DIR=`dirname $(readlink -f $0)`
 
 sudo yum update -y
@@ -9,13 +9,13 @@ sudo yum install -y git pssh autoconf
 # required by impala-tpcds-kit
 sudo yum install -y git gcc make flex bison byacc curl unzip patch
 
-if [ ! -f "async-profiler-2.0-linux-x64.tar.gz" ]; then
-    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.0/async-profiler-2.0-linux-x64.tar.gz
-    sudo tar zxvf async-profiler-2.0-linux-x64.tar.gz -C /opt/
+if [ ! -f "/tmp/$ASYNC_PROFILER_TARBALL" ]; then
+    wget $ASYNC_PROFILER_DOWNLOAD_PATH -P /tmp/
+    sudo tar zxvf /tmp/$ASYNC_PROFILER_TARBALL -C /opt/
 fi
-if [ ! -f "async-profiler-1.8.5-linux-x64.tar.gz" ]; then
-    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.8.5/async-profiler-1.8.5-linux-x64.tar.gz
-    sudo tar zxvf async-profiler-1.8.5-linux-x64.tar.gz -C /opt/
+if [ ! -f "/tmp/async-profiler-1.8.5-linux-x64.tar.gz" ]; then
+    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v3.8.5/async-profiler-1.8.5-linux-x64.tar.gz -P /tmp/
+    sudo tar zxvf /tmp/async-profiler-1.8.5-linux-x64.tar.gz -C /opt/
 fi
 
 MVN_VERSION="3.8.5"

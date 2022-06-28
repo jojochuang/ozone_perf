@@ -11,8 +11,8 @@ do
         DATABASE_NAME="hdfs_${SPARK_SQL_FILE_FORMAT}_${s}gb"
     fi
     spark-shell \
---conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
---conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,event=cpu,file=./tpcds_flamegraph.html" \
+--conf "spark.yarn.dist.archives=hdfs:///tmp/${ASYNC_PROFILER_TARBALL}#async-profiler2" \
+--conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler2/async-profiler-2.8.1-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./app_flamegraph.html" \
 --conf spark.executor.instances=${NUM_EXECUTORS} \
 --conf spark.executor.cores=3 \
 --conf spark.executor.memory=4g \

@@ -6,10 +6,11 @@ source $CURRENT_DIR/../conf.sh
 $CURRENT_DIR/create_ozone_dir.sh
 
 
-if [ ! -f "async-profiler-2.0-linux-x64.tar.gz" ]; then
-    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v5.0/async-profiler-2.0-linux-x64.tar.gz
-    hadoop fs -put async-profiler-2.0-linux-x64.tar.gz /tmp/
-fi
+#if [ ! -f "async-profiler-2.0-linux-x64.tar.gz" ]; then
+#    wget https://github.com/jvm-profiling-tools/async-profiler/releases/download/v5.0/async-profiler-2.0-linux-x64.tar.gz
+#    hadoop fs -put async-profiler-2.0-linux-x64.tar.gz /tmp/
+#fi
+hadoop fs -put /tmp/$ASYNC_PROFILER_TARBALL /tmp/
 
 for s in "${scale[@]}"
 do
@@ -24,8 +25,8 @@ do
     fi
 
     spark-shell \
---conf "spark.yarn.dist.archives=hdfs:///tmp/async-profiler-2.0-linux-x64.tar.gz#async-profiler-2.0-linux-x64" \
---conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler-2.0-linux-x64/async-profiler-2.0-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./app_flamegraph.html" \
+--conf "spark.yarn.dist.archives=hdfs:///tmp/${ASYNC_PROFILER_TARBALL}#async-profiler2" \
+--conf "spark.executor.extraJavaOptions=-agentpath:./async-profiler2/async-profiler-2.8.1-linux-x64/build/libasyncProfiler.so=start,svg=samples,event=cpu,file=./app_flamegraph.html" \
 --conf spark.executor.instances=${NUM_EXECUTORS} \
 --conf spark.executor.cores=3 \
 --conf spark.executor.memory=4g \
