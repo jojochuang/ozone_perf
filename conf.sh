@@ -36,5 +36,6 @@ REGIONSERVER_HOST_FILE="cluster_hosts_regionserver.txt"
 ASYNC_PROFILER_TARBALL="async-profiler-2.8.1-linux-x64.tar.gz"
 ASYNC_PROFILER_DOWNLOAD_PATH="https://github.com/jvm-profiling-tools/async-profiler/releases/download/v2.8.1/$ASYNC_PROFILER_TARBALL"
 JAVA_HOME=`echo $JAVA_HOME_FINDER`
+MVN_VERSION="3.8.6"
 export PATH=$PATH:$JAVA_HOME/bin/
 export HADOOP_CONF_DIR=/etc/hadoop/conf

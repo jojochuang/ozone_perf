@@ -18,7 +18,6 @@ if [ ! -f "/tmp/async-profiler-1.8.5-linux-x64.tar.gz" ]; then
     sudo tar zxvf /tmp/async-profiler-1.8.5-linux-x64.tar.gz -C /opt/
 fi
 
-MVN_VERSION="3.8.5"
 if [ ! -f "apache-maven-${MVN_VERSION}-bin.tar.gz" ]; then
     wget https://downloads.apache.org/maven/maven-3/${MVN_VERSION}/binaries/apache-maven-${MVN_VERSION}-bin.tar.gz
     tar zxvf apache-maven-${MVN_VERSION}-bin.tar.gz -C ~/

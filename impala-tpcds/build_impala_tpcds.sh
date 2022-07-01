@@ -5,7 +5,7 @@ source $SCRIPT_ROOT/../conf.sh
 sudo yum install -y gcc make flex bison byacc git
 
 
-export PATH=$HOME/apache-maven-3.8.3/bin:$PATH
+export PATH=$HOME/apache-maven-${MVN_VERSION}/bin:$PATH
 
 cd $SCRIPT_ROOT
 git clone https://github.com/cloudera/impala-tpcds-kit.git
