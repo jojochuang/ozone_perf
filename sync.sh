@@ -10,7 +10,7 @@ done < $HOST_FILE
 
 for host in "${HOSTS[@]}"; do
 	echo $host
-	rsync -raP -e 'ssh -o StrictHostKeyChecking=no' --exclude ".*" --exclude "*/.*" . systest@$host:/tmp/ozone_perf  &
+	rsync -raP -e 'ssh -o StrictHostKeyChecking=no' --exclude ".*" --exclude "*/.*" . ${PASSWORDLESS_USER}@$host:/tmp/ozone_perf  &
 done
 
 for job in `jobs -p`

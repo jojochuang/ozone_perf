@@ -10,7 +10,7 @@ done < $HOST_FILE
 
 for host in "${HOSTS[@]}"; do
 	echo $i
-	ssh systest@$host /tmp/ozone_perf/install_local.sh &
+	ssh ${PASSWORDLESS_USER}@$host /tmp/ozone_perf/install_local.sh &
 done
 
 for job in `jobs -p`

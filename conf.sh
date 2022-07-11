@@ -3,6 +3,7 @@
 # configure these
 DOMAIN=weichiu
 CM_HOST=${DOMAIN}-1.${DOMAIN}.root.hwx.site
+PASSWORDLESS_USER="systest"
 # choose between http or https
 export CM_HTTP=http
 export OZONE_SERVICE_ID="ozone1"

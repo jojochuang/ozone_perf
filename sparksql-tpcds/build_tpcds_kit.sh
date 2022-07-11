@@ -15,7 +15,7 @@ if [ ! -f "tpcds-kit" ]; then
 fi
 
 for host in "${HOSTS[@]}"; do
-    rsync -raP -e 'ssh -o StrictHostKeyChecking=no' tpcds-kit systest@$host:/tmp/
+    rsync -raP -e 'ssh -o StrictHostKeyChecking=no' tpcds-kit ${PASSWORDLESS_USER}@$host:/tmp/
 done
 
 
