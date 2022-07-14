@@ -8,6 +8,13 @@ while IFS= read -r line; do
   IMPALAD_HOSTS+=("$line")
 done < $CURRENT_DIR/../$IMPALAD_HOST_FILE
 
+
+if [ "$CDP_TLS" = "true" ]; then
+    IMPALA_SSL="--ssl"
+else
+    IMPALA_SSL=""
+fi
+
 for s in "${scale[@]}"
 do
 	cd $CURRENT_DIR/impala-tpcds-kit/tpcds-gen
@@ -24,9 +31,9 @@ do
         sed -i "s/tpcds_10000/tpcds_o3_${s}/g" impala-parquet-o3-${s}gb.sql
         sed -i "s/tpcds_10000/tpcds_o3_${s}/g" impala-insert-o3-${s}gb.sql
 
-	impala-shell -f impala-external-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]}
-	impala-shell -f impala-parquet-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]}
-	impala-shell -f impala-insert-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]}
+	impala-shell -f impala-external-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]} $IMPALA_SSL
+	impala-shell -f impala-parquet-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]} $IMPALA_SSL
+	impala-shell -f impala-insert-o3-${s}gb.sql -i ${IMPALAD_HOSTS[0]} $IMPALA_SSL
 done
 
 echo "Done. Next, run run_tpcds.sh to generate queries for TPC-DS"

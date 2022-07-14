@@ -3,6 +3,7 @@
 # configure these
 DOMAIN=weichiu
 CM_HOST=${DOMAIN}-1.${DOMAIN}.root.hwx.site
+export CM_PORT=7180
 PASSWORDLESS_USER="systest"
 # choose between http or https
 export CM_HTTP=http

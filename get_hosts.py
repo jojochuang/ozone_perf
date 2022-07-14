@@ -14,6 +14,7 @@ import os
 # Configure HTTP basic authorization: basic
 cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
+cm_client.configuration.verify_ssl = False
 
 # Create an instance of the API class
 cm_http = os.environ["CM_HTTP"]
@@ -23,7 +24,7 @@ if len(sys.argv) < 2:
 api_host_name = sys.argv[1]
 role_type = sys.argv[2]
 api_host = cm_http + '://' + api_host_name
-port = '7180'
+port = os.environ["CM_PORT"]
 api_version = 'v30'
 # Construct base URL for API
 # http://cmhost:7180/api/v30

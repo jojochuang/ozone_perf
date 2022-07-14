@@ -15,6 +15,7 @@ import os
 # Configure HTTP basic authorization: basic
 cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
+cm_client.configuration.verify_ssl = False
 
 file_system_prefix = os.environ["FILE_SYSTEM_PREFIX"]
 ozone_service_id = os.environ["OZONE_SERVICE_ID"]
@@ -58,7 +59,7 @@ if len(sys.argv) < 2:
 api_host_name = sys.argv[1]
 api_host = cm_http + '://' + api_host_name
 print("cluster: " + api_host)
-port = '7180'
+port = os.environ["CM_PORT"]
 api_version = 'v30'
 # Construct base URL for API
 # http://cmhost:7180/api/v30

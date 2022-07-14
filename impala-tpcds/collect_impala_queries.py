@@ -9,16 +9,16 @@ import cm_client
 from cm_client.rest import ApiException
 from pprint import pprint
 import sys
+import os
 
 # Configure HTTP basic authorization: basic
 cm_client.configuration.username = 'admin'
 cm_client.configuration.password = 'admin'
+cm_client.configuration.verify_ssl = False
 if len(sys.argv) < 2:
     print("requires one argument: CM host name")
     system.exit(-1)
 api_host_name = sys.argv[1]
-port = '7180'
-api_version = 'v43'
 
 def wait(cmd, timeout=None):
     SYNCHRONOUS_COMMAND_ID = -1
@@ -52,8 +52,12 @@ def wait(cmd, timeout=None):
 
 
 # Create an instance of the API class
+cm_http = os.environ["CM_HTTP"]
+api_host = cm_http + '://' + api_host_name
 # Construct base URL for API
 # http://cmhost:7180/api/v30
+port = os.environ["CM_PORT"]
+api_version = 'v43'
 api_url = api_host + ':' + port + '/api/' + api_version
 api_client = cm_client.ApiClient(api_url)
 cluster_api_instance = cm_client.ClustersResourceApi(api_client)
