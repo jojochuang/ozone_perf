@@ -8,7 +8,6 @@ while IFS= read -r line; do
   IMPALAD_HOSTS+=("$line")
 done < $CURRENT_DIR/../$IMPALAD_HOST_FILE
 
-
 if [ "$CDP_TLS" = "true" ]; then
     IMPALA_SSL="--ssl"
 else

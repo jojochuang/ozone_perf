@@ -2,6 +2,12 @@
 CURRENT_DIR=`dirname "$0"`
 source $CURRENT_DIR/../conf.sh
 
+if [ "$CDP_TLS" = "true" ]; then
+    IMPALA_SSL="--ssl"
+else
+    IMPALA_SSL=""
+fi
+
 IMPALAD_HOSTS=()
 while IFS= read -r line; do
   IMPALAD_HOSTS+=("$line")
