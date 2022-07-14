@@ -8,6 +8,7 @@ PASSWORDLESS_USER="systest"
 # choose between http or https
 export CM_HTTP=http
 export OZONE_SERVICE_ID="ozone1"
+CDP_TLS="true"
 
 # FILE_SYSTEM is ozone or hdfs
 export FILE_SYSTEM="ozone" 

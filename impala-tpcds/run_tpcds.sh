@@ -9,5 +9,5 @@ done < $CURRENT_DIR/../$IMPALAD_HOST_FILE
 
 for s in "${scale[@]}"
 do
-	sudo -u hive impala-shell -d tpcds_o3_${s}_parquet -i ${IMPALAD_HOSTS[0]} $IMPALA_SSL < /tmp/impala_tpcds_query_${s}gb/query_0.sql
+	sudo -u hive impala-shell -d tpcds_${FILE_SYSTEM}_${s}_parquet -i ${IMPALAD_HOSTS[0]} $IMPALA_SSL < /tmp/impala_tpcds_query_${s}gb/query_0.sql
 done
