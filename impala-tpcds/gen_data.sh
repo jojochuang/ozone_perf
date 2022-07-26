@@ -16,7 +16,7 @@ fi
 
 if [ "$FILE_SYSTEM" == "ozone" ]; then
     # choose between o3fs and ofs
-    export FILE_SYSTEM_PREFIX="ofs://$OZONE_SERVICE_ID/vol1/bucket"
+    export FILE_SYSTEM_PREFIX="ofs://$OZONE_SERVICE_ID/vol1/bucket1"
     export TPCDS_INPUT_PREFIX="$FILE_SYSTEM_PREFIX"
 elif [ "$FILE_SYSTEM" == "hdfs" ]; then
     export FILE_SYSTEM_PREFIX=""
