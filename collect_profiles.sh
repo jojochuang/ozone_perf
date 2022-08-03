@@ -15,12 +15,6 @@ for host in "${HOSTS[@]}"; do
 	ssh ${PASSWORDLESS_USER}@$host "/tmp/ozone_perf/collect_profiles_local.sh"
 done
 
-for job in `jobs -p`
-do
-        echo "Waiting for completion of job " $job
-        wait $job
-done
-
 # send back profiles
 
 DEST_DIR="/tmp/ozone_dn_profiles-`date '+%F-%H-%M-%S'`"
@@ -30,6 +24,9 @@ echo "Collecting profiles"
 for host in "${HOSTS[@]}"; do
 	echo $host
 	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_dn_profile.html ${DEST_DIR}/ozone_dn-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_om_profile.html ${DEST_DIR}/ozone_om-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_scm_profile.html ${DEST_DIR}/ozone_scm-${host}.html
 done
 
 tar zcvf ${DEST_DIR}.tgz ${DEST_DIR}
+echo "Profiles are available in ${DEST_DIR}.tgz"
