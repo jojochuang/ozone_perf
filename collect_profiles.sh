@@ -17,7 +17,7 @@ done
 
 # send back profiles
 
-DEST_DIR="/tmp/ozone_dn_profiles-`date '+%F-%H-%M-%S'`"
+DEST_DIR="/tmp/ozone_profiles-`date '+%F-%H-%M-%S'`"
 mkdir $DEST_DIR
 
 echo "Collecting profiles"
