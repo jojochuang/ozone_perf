@@ -2,9 +2,12 @@
 SCRIPT_ROOT=`dirname "$0"`
 source $SCRIPT_ROOT/conf.sh
 
-OZONE_DN_PID=`pgrep -f HddsDatanodeService `
-OZONE_OM_PID=`pgrep -f OzoneManagerStarter `
-OZONE_SCM_PID=`pgrep -f StorageContainerManagerStarter `
+OZONE_DN_PID=`pgrep -f HddsDatanodeService`
+OZONE_OM_PID=`pgrep -f OzoneManagerStarter`
+OZONE_SCM_PID=`pgrep -f StorageContainerManagerStarter`
+
+HDFS_NN_PID=`pgrep -f NameNode`
+HDFS_DN_PID=`pgrep -f DataNode`
 
 IMPALAD_PID=`pgrep impalad`
 
@@ -20,6 +23,16 @@ if [ ! -z "$OZONE_SCM_PID" ]; then
 	echo "Ozone SCM PID=$OZONE_SCM_PID"
 	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/ozone_scm_profile.html $OZONE_SCM_PID
 fi
+
+if [ ! -z "$HDFS_NN_PID" ]; then
+	echo "HDFS NN PID=$HDFS_NN_PID"
+	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/hdfs_nn_profile.html  $HDFS_NN_PID
+fi
+if [ ! -z "$HDFS_DN_PID" ]; then
+	echo "HDFS DN PID=$HDFS_DN_PID"
+	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/hdfs_dn_profile.html $HDFS_DN_PID
+fi
+
 if [ ! -z "$IMPALAD_PID" ]; then
 	echo "Impalad PID=$IMPALAD_PID"
 	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/impalad_profile.html $IMPALAD_PID

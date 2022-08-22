@@ -26,6 +26,9 @@ for host in "${HOSTS[@]}"; do
 	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_dn_profile.html ${DEST_DIR}/ozone_dn-${host}.html
 	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_om_profile.html ${DEST_DIR}/ozone_om-${host}.html
 	scp ${PASSWORDLESS_USER}@$host:/tmp/ozone_scm_profile.html ${DEST_DIR}/ozone_scm-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/hdfs_nn_profile.html ${DEST_DIR}/hdfs_nn-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/hdfs_dn_profile.html ${DEST_DIR}/hdfs_dn-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/impalad_profile.html ${DEST_DIR}/impalad-${host}.html
 done
 
 tar zcvf ${DEST_DIR}.tgz ${DEST_DIR}
