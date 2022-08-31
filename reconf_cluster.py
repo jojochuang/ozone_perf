@@ -271,7 +271,7 @@ def configure_impala():
 
     body = cm_client.ApiServiceConfig([env_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, impala.name, body=body)
-    print("HBase updated")
+    print("Impala updated")
 
 def refresh():
     cluster_api_instance = cm_client.ClustersResourceApi(api_client)

@@ -42,3 +42,5 @@ sudo pip install cm_client
 
 $CURRENT_DIR/install_btrace.sh
 $CURRENT_DIR/install_jemalloc.sh
+
+$CURRENT_DIR/config_sys.sh
