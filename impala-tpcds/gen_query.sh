@@ -5,10 +5,13 @@ source $CURRENT_DIR/../conf.sh
 for s in "${scale[@]}"
 do
 	cd $CURRENT_DIR/tpcds-kit/tools
-	mkdir /tmp/impala_tpcds_query_${s}gb
-	./dsqgen -DIRECTORY ../../impala-tpcds-kit/query-templates/ -INPUT ../../impala-tpcds-kit/query-templates/templates.lst -VERBOSE Y -QUALIFY Y -SCALE $s -DIALECT impala -OUTPUT_DIR /tmp/impala_tpcds_query_${s}gb
+        QUERY_OUTPUT_DIR="/tmp/impala_tpcds_query_${s}gb"
+	mkdir $QUERY_OUTPUT_DIR
+	./dsqgen -DIRECTORY ../../impala-tpcds-kit/query-templates/ -INPUT ../../impala-tpcds-kit/query-templates/templates.lst -VERBOSE Y -QUALIFY Y -SCALE $s -DIALECT impala -OUTPUT_DIR $QUERY_OUTPUT_DIR
 
-	rsync -raP -e 'ssh -o StrictHostKeyChecking=no'  /tmp/impala_tpcds_query_${s}gb root@$CM_HOST:/tmp/
+        echo "set REPLICA_PREFERENCE=$REPLICA_PREFERENCE;" | cat - $QUERY_OUTPUT_DIR/query_0.sql > .temp && mv .temp $QUERY_OUTPUT_DIR/query_0.sql
+
+	rsync -raP -e 'ssh -o StrictHostKeyChecking=no'  $QUERY_OUTPUT_DIR root@$CM_HOST:/tmp/
 done
 
 echo "Done. Next, run gen_data.sh to generate queries for TPC-DS"

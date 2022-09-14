@@ -2,14 +2,14 @@
 SCRIPT_ROOT=`dirname "$0"`
 source $SCRIPT_ROOT/conf.sh
 
-pip install cm_client
+pip3 install cm_client
 
 # ask CM for list of hosts.
-python get_hosts.py $CM_HOST all > $HOST_FILE
+python3 get_hosts.py $CM_HOST all > $HOST_FILE
 # ask CM for list of ImpalaD hosts.
-python get_hosts.py $CM_HOST IMPALAD > $IMPALAD_HOST_FILE
+python3 get_hosts.py $CM_HOST IMPALAD > $IMPALAD_HOST_FILE
 # ask CM for list of HBase RegionServer hosts.
-python get_hosts.py $CM_HOST REGIONSERVER > $REGIONSERVER_HOST_FILE
+python3 get_hosts.py $CM_HOST REGIONSERVER > $REGIONSERVER_HOST_FILE
 
 if [ "$KERBEROS" = "true" ]; then
     ssh ${PASSWORDLESS_USER}@${CM_HOST} sudo -u hdfs kinit -kt /cdep/keytabs/hdfs.keytab hdfs
@@ -24,7 +24,7 @@ if [ "$FILE_SYSTEM" == "ozone" ]; then
 fi
 # TODO: check to make sure the directories are created properly
 
-python ./reconf_cluster.py ${CM_HOST}
+python3 ./reconf_cluster.py ${CM_HOST}
 
 ./sync.sh
 ./install.sh
@@ -48,7 +48,7 @@ ssh ${PASSWORDLESS_USER}@${CM_HOST} /tmp/ozone_perf/hbase-ycsb/create_table.sh
 
 echo "Next, go to $CM_HOST, to run Impala TPC-DS, first generate data by running /tmp/ozone_perf/impala-tpcds/gen_data.sh"
 echo " and then run queries: /tmp/ozone_perf/impala-tpcds/run_tpcds.sh"
-echo " analyze the result: python /tmp/ozone_perf/impala-tpcds/collect_impala_queries.py"
+echo " analyze the result: python3 /tmp/ozone_perf/impala-tpcds/collect_impala_queries.py"
 
 echo "for SparkSQL TPC-DS, first generate data by running /tmp/ozone_perf/sparksql-tpcds/gen_data.sh"
 echo " and then run queries: /tmp/ozone_perf/sparksql-tpcds/run_tpcds.sh"

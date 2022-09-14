@@ -47,3 +47,4 @@ do
 done
 
 echo "Done. Next, run run_tpcds.sh to generate queries for TPC-DS"
+exit 0

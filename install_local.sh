@@ -38,7 +38,7 @@ sudo alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 \
 --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 \
 --family cmake
 
-sudo pip install cm_client
+sudo pip3 install cm_client
 
 $CURRENT_DIR/install_btrace.sh
 $CURRENT_DIR/install_jemalloc.sh
