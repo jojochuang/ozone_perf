@@ -6,9 +6,9 @@ OLD_DIR=`pwd`
 
 cd $CURRENT_DIR
 cp conf.sh conf.sh.bak
-sed -i 's/scale=\( .*  \)/scale=\( 10000  \)/g' conf.sh
+sed -i 's/scale=.*/scale=\( 10000  \)/g' conf.sh
 
-#./impala-tpcds/gen_query.sh
+./impala-tpcds/gen_query.sh
 
 HAS_3TB_DATA="has_10tb_impala.data"
 if [ ! -f "$HAS_10TB_DATA" ]; then
