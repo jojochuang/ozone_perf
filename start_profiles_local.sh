@@ -5,6 +5,7 @@ source $SCRIPT_ROOT/conf.sh
 OZONE_DN_PID=`pgrep -f HddsDatanodeService `
 OZONE_OM_PID=`pgrep -f OzoneManagerStarter `
 OZONE_SCM_PID=`pgrep -f StorageContainerManagerStarter `
+OZONE_RECON_PID=`pgrep -f ReconServer `
 
 HDFS_NN_PID=`pgrep -f NameNode`
 HDFS_DN_PID=`pgrep -f DataNode`
@@ -22,6 +23,10 @@ fi
 if [ ! -z "$OZONE_SCM_PID" ]; then
 	echo "Ozone SCM PID=$OZONE_SCM_PID"
 	/opt/async-profiler-2.8.1-linux-x64/profiler.sh start $OZONE_SCM_PID
+fi
+if [ ! -z "$OZONE_RECON_PID" ]; then
+	echo "Ozone Recon PID=$OZONE_RECON_PID"
+	/opt/async-profiler-2.8.1-linux-x64/profiler.sh start $OZONE_RECON_PID
 fi
 
 if [ ! -z "$HDFS_NN_PID" ]; then

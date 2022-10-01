@@ -13,6 +13,6 @@ done < $HOST_FILE
 
 for host in "${HOSTS[@]}"; do
 	echo $host
-	ssh ${PASSWORDLESS_USER}@$host '/tmp/ozone_perf/start_profiles_local.sh'
+	ssh ${PASSWORDLESS_USER}@$host 'sudo /tmp/ozone_perf/start_profiles_local.sh'
 done
 
