@@ -30,6 +30,8 @@ for host in "${HOSTS[@]}"; do
 	scp ${PASSWORDLESS_USER}@$host:/tmp/hdfs_nn_profile.html ${DEST_DIR}/hdfs_nn-${host}.html
 	scp ${PASSWORDLESS_USER}@$host:/tmp/hdfs_dn_profile.html ${DEST_DIR}/hdfs_dn-${host}.html
 	scp ${PASSWORDLESS_USER}@$host:/tmp/impalad_profile.html ${DEST_DIR}/impalad-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/hbase_rs_profile.html ${DEST_DIR}/hbase_rs-${host}.html
+	scp ${PASSWORDLESS_USER}@$host:/tmp/ycsb_profile.html ${DEST_DIR}/ycsb-${host}.html
 done
 
 tar zcvf ${DEST_DIR}.tgz ${DEST_DIR}

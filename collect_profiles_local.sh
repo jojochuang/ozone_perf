@@ -12,6 +12,9 @@ HDFS_DN_PID=`pgrep -f DataNode`
 
 IMPALAD_PID=`pgrep impalad`
 
+HBASE_REGIONSERVER_PID=`pgrep -f HRegionServer`
+YCSB_PID=`pgrep -f site.ycsb.Client`
+
 rm -f /tmp/*_profile.html
 
 if [ ! -z "$OZONE_DN_PID" ]; then
@@ -45,4 +48,13 @@ if [ ! -z "$IMPALAD_PID" ]; then
 	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/impalad_profile.html $IMPALAD_PID
 fi
 
+if [ ! -z "$HBASE_REGIONSERVER_PID" ]; then
+	echo "HBase RegionServer PID=$HBASE_REGIONSERVER_PID"
+	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/hbase_rs_profile.html $HBASE_REGIONSERVER_PID
+fi
+
+if [ ! -z "$YCSB_PID" ]; then
+	echo "YCSB PID=$YCSB_PID"
+	/opt/async-profiler-2.8.1-linux-x64/profiler.sh stop -f /tmp/ycsb_profile.html $YCSB_PID
+fi
 chown ${PASSWORDLESS_USER} /tmp/*_profile.html

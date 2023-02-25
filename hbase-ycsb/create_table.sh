@@ -10,7 +10,7 @@ N_SPLITS=$(( 10 * $NUM_RS ))
 echo $N_SPLITS
 
 hbase shell <<EOF
-n_splits = 20
+n_splits = $N_SPLITS
 create 'usertable', 'family', {SPLITS => (1..n_splits).map {|i| "user#{1000+i*(9999-1000)/n_splits}"}}
 
 EOF

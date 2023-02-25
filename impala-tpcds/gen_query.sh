@@ -13,7 +13,7 @@ do
 
         echo "set REPLICA_PREFERENCE=$REPLICA_PREFERENCE;" | cat - $QUERY_OUTPUT_DIR/query_0.sql > .temp && mv .temp $QUERY_OUTPUT_DIR/query_0.sql
 
-	rsync -raP -e 'ssh -o StrictHostKeyChecking=no'  $QUERY_OUTPUT_DIR root@$CM_HOST:/tmp/
+	#rsync -raP -e 'ssh -o StrictHostKeyChecking=no'  $QUERY_OUTPUT_DIR ${PASSWORDLESS_USER}@$CM_HOST:/tmp/
 	cd ../../
 done
 
