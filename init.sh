@@ -28,6 +28,7 @@ python3 ./reconf_cluster.py ${CM_HOST}
 
 ./sync.sh
 ./install.sh
+./install_jaeger.sh ${CM_HOST}
 
 if [ "$KERBEROS" = "true" ]; then
     ssh ${PASSWORDLESS_USER}@${CM_HOST} kinit -kt /cdep/keytabs/systest.keytab systest

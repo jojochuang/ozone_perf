@@ -135,7 +135,7 @@ def configure_hdfs():
 
 def configure_ozone():
     # support async profiler
-    safey_valve_config = cm_client.ApiConfig(name="ozone-conf/ozone-site.xml_service_safety_valve", value="<property><name>hdds.profiler.endpoint.enabled</name><value>true</value></property>")
+    safey_valve_config = cm_client.ApiConfig(name="ozone-conf/ozone-site.xml_service_safety_valve", value="<property><name>ozone.fs.hsync.enabled</name><value>true</value></property><property><name>hdds.profiler.endpoint.enabled</name><value>true</value></property><property><name>hdds.tracing.enabled</name><value>true</value></property>")
 
     body = cm_client.ApiServiceConfig([safey_valve_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
@@ -151,7 +151,7 @@ def configure_ozone():
 
     # add environment variable
     #env_config = cm_client.ApiConfig(name="OZONE_service_env_safety_valve", value="ASYNC_PROFILER_HOME=/opt/async-profiler-2.0-linux-x64")
-    env_config = cm_client.ApiConfig(name="OZONE_service_env_safety_valve", value="ASYNC_PROFILER_HOME=/opt/async-profiler-1.8.5-linux-x64")
+    env_config = cm_client.ApiConfig(name="OZONE_service_env_safety_valve", value="ASYNC_PROFILER_HOME=/opt/async-profiler-1.8.5-linux-x64\nJAEGER_AGENT_HOST=" + api_host_name + " \nJAEGER_SAMPLER_TYPE=const\nJAEGER_SAMPLER_PARAM=1")
 
     body = cm_client.ApiServiceConfig([env_config])
     updated_configs = services_api_instance.update_service_config(cluster.name, ozone.name, body=body)
